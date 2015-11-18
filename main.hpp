@@ -1,4 +1,13 @@
 /*********************************************************************
+** Author: Collin James
+** Date: 11/17/15
+** Description: Driver program to demonstrate Queue ADT. Prompts user
+** to add value, remove value, or print queue. Function definitions.
+*********************************************************************/
+
+#include <limits> // for intakeInt()
+
+/*********************************************************************
 ** Description: 
 ** Test driver; calls removeVal() and addVall()
 *********************************************************************/
@@ -46,4 +55,14 @@ int mainMenu();
 *********************************************************************/
 void intakeInt(int &num_items, std::string message);
 
+/*********************************************************************
+** Description: 
+** Display the queue. Since the queue doesn't have a print function,
+** remove all of the values from the queue and copy them into another
+** queue. Display the values as you do so. Then copy the values back
+** into the original queue so the user can continue to add to it.
+*********************************************************************/
+void displayQueue(Queue *testQueue, Queue *tempQueue);
+
+/* Used in case switch in main */
 enum Choices { QUIT, ADD, REMOVE, PRINT };

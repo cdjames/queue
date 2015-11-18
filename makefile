@@ -5,9 +5,6 @@
 # add more if needed.
 
 CXX = Queue.cpp
-# CXX += LinearSearch.cpp
-# CXX += SelectionSort.cpp
-# CXX += BinarySearch.cpp
 CXX += main.cpp 
 
 PROG1 = main

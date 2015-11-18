@@ -1,8 +1,8 @@
 /*********************************************************************
 ** Author: Collin James
-** Date: 11/3/15
-** Description: A class that implements a circular double-linked queue data
-** structure.
+** Date: 11/17/15
+** Description: A class that implements a double-linked circular queue 
+** data structure
 **
 ** Implementation file
 *********************************************************************/
@@ -82,7 +82,7 @@ int Queue::addBack(int val)
 				/* back value is free to get new value */
 				back->value = val;
 			}
-			
+
 			/* no empty nodes; need to add a new one */
 			else
 			{
@@ -119,43 +119,50 @@ int Queue::removeFront()
 	return frontval;	// return value; may be -1 if empty queue
 }
 
-int Queue::getFront()
+int Queue::getFront() const
 {
-	if(front->value == -1)
-		std::cout << "Queue is empty" << std::endl;
+	// !!!!! removed the following error message so that the end user
+	// !!!!! can test for empty queue without littering output. This
+	// !!!!! is a "design decision"! I know that the assignment instructions
+	// !!!!! ask for an error message, but this lets the end user tailor
+	// !!!!! the message.
+
+	// if(front->value == -1)
+	// 	std::cout << "Queue is empty" << std::endl;
 
 	/* will return -1 if empty */
 	return front->value;
 }
 
-void Queue::displayQueue()
-{
-	int count = 0;
-	// std::cout << "    front: " << front->value << "    " << "back: " << back->value << std::endl;
-	if(front->value != -1)
-	{
+/* REMOVED DUE TO ASSIGNMENT DESIGN INSTRUCTIONS */
+// void Queue::displayQueue()
+// {
+// 	int count = 0;
+// 	// std::cout << "    front: " << front->value << "    " << "back: " << back->value << std::endl;
+// 	if(front->value != -1)
+// 	{
 		/* loop through queue and print values */
-		Queuenode *tempPtr = front;
-		std::cout << "    front pointer is: " << front << "   \n";
+		// Queuenode *tempPtr = front;
+		// std::cout << "    front pointer is: " << front << "   \n";
 		
-		do
-		{
-			if(tempPtr->value != -1) // if not empty node
-			{
-				count++;
-				std::cout << "value at node " << count << " is: " << tempPtr->value << std::endl;
+		// do
+		// {
+		// 	if(tempPtr->value != -1) // if not empty node
+		// 	{
+		// 		count++;
+		// 		std::cout << "value at node " << count << " is: " << tempPtr->value << std::endl;
 				/* comment out next three lines for no pointer addresses */
-				std::cout << "    pointer is: " << tempPtr << std::endl;
-				std::cout << "    ahead pointer is: " << tempPtr->ahead << std::endl;
-				std::cout << "    behind pointer is: " << tempPtr->behind << std::endl;
-			}
+// 				std::cout << "    pointer is: " << tempPtr << std::endl;
+// 				std::cout << "    ahead pointer is: " << tempPtr->ahead << std::endl;
+// 				std::cout << "    behind pointer is: " << tempPtr->behind << std::endl;
+// 			}
 
-			tempPtr = tempPtr->behind;
-		} while(tempPtr != front); // when it has gone all the way around it will be equal to front again
+// 			tempPtr = tempPtr->behind;
+// 		} while(tempPtr != front); // when it has gone all the way around it will be equal to front again
 
-		std::cout << "    back pointer is: " << back;
-		std::cout << std::endl;
-	}
-	else // if front (or back) is -1, nothing is in queue
-		std::cout << "Queue is empty" << std::endl;
-}
+// 		std::cout << "    back pointer is: " << back;
+// 		std::cout << std::endl;
+// 	}
+// 	else // if front (or back) is -1, nothing is in queue
+// 		std::cout << "Queue is empty" << std::endl;
+// }

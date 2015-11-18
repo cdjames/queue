@@ -71,9 +71,9 @@ public:
 	/*********************************************************************
 	** Description: 
 	** Simply return the value at the front pointer of the queue. Returns
-	** -1 if queue is empty.
+	** -1 if queue is empty. Used in removeFront()
 	*********************************************************************/
-	int getFront();
+	int getFront() const;
 
 	// umm, for testing
 	/********************************************************************
@@ -81,7 +81,7 @@ public:
 	** Loop through queue and print values (and pointer addresses). If 
 	** empty print "Queue is empty". Print from front to back.
 	********************************************************************/
-	void displayQueue();
+	// void displayQueue();
 };
 
 #endif

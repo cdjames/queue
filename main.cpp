@@ -11,10 +11,13 @@
 
 int main()
 {
-	Queue *testQueue = new Queue();
+	Queue *testQueue = new Queue(); // new empty queue
+	Queue *tempQueue = new Queue(); // new empty queue
 	// queueTest(testQueue); // uncomment to run tests
+
 	int input = -1,
 		value;
+
 	/* loop until user enters 0 for quit */
 	while(input != QUIT)
 	{
@@ -36,10 +39,11 @@ int main()
 				if(value >= 0)
 					std::cout << "Removed " << value << " from queue." << std::endl;
 				else
-					std::cout << "Cannot remove from empty queue." << std::endl;
+					std::cout << "Error: cannot remove from empty queue." << std::endl;
 				break;
 			case PRINT: // 3
-				testQueue->displayQueue();
+				// testQueue->displayQueue(); // for testing, yeah
+				displayQueue(testQueue, tempQueue);
 				break;
 			default:
 				break;
@@ -48,6 +52,7 @@ int main()
 	}
 
 	delete testQueue; // delete the pointer
+	delete tempQueue; // delete the pointer
 
 	return 0;	
 }
@@ -55,7 +60,7 @@ int main()
 void queueTest(Queue *testQueue)
 {	
 	std::cout << "\n- Testing Queue" << std::endl;
-	testQueue->displayQueue();
+	// testQueue->displayQueue();
 	addVal(testQueue, 2);
 	addVal(testQueue, 4);
 	addVal(testQueue, 6);
@@ -97,13 +102,13 @@ void queueTest(Queue *testQueue)
 void removeVal(Queue* testQueue)
 {
 	std::cout << "removed node value: " << testQueue->removeFront() << std::endl;
-	testQueue->displayQueue();
+	// testQueue->displayQueue();
 }
 
 void addVal(Queue* testQueue, int val)
 {
 	std::cout << "Adding " << testQueue->addBack(val) << std::endl;
-	testQueue->displayQueue();
+	// testQueue->displayQueue();
 }
 
 void clearCin()
@@ -165,4 +170,31 @@ void intakeInt(int &num_items, std::string message)
 
 	clearCin();
 	return;
+}
+
+void displayQueue(Queue *testQueue, Queue *tempQueue)
+{
+	int value,
+		count = 0;
+	value = testQueue->removeFront();
+
+	if(value != -1)
+	{
+		while(value != -1)
+		{
+			count++;
+			std::cout << "value at node " << count << " is: " << value << std::endl;
+			tempQueue->addBack(value);
+			value = testQueue->removeFront();
+		}
+		
+		value = tempQueue->removeFront();
+		while(value != -1)
+		{
+			testQueue->addBack(value);
+			value = tempQueue->removeFront();
+		}
+	}
+	else
+		std::cout << "Queue is empty." << std::endl;
 }
