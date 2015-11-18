@@ -1,8 +1,8 @@
 /*********************************************************************
 ** Author: Collin James
-** Date: 11/3/15
-** Description: A class that implements a double-linked queue data
-** structure
+** Date: 11/17/15
+** Description: A class that implements a double-linked circular queue 
+** data structure
 *********************************************************************/
 
 #ifndef QUEUE_HPP
@@ -17,12 +17,22 @@ protected:
 		int value;
 		Queuenode *ahead; 	//link to node added before
 		Queuenode *behind;	//link to node added after
+
 		/* constructor; set a value and before/after nodes */
-		Queuenode(int val, Queuenode *aheadnode = NULL, Queuenode *behindnode = NULL)
+		Queuenode(int val = -1, Queuenode *aheadnode = NULL, Queuenode *behindnode = NULL)
 		{
 			value = val;
-			ahead = aheadnode;
-			behind = behindnode;
+
+			/* Don't want null pointers, so make ahead/behind point to itself */
+			if(!aheadnode)
+				ahead = this;
+			else
+				ahead = aheadnode;
+
+			if(!behindnode)
+				behind = this;
+			else
+				behind = behindnode;
 		}
 	};
 
@@ -31,9 +41,10 @@ protected:
 public:
 	/*********************************************************************
 	** Description: 
-	** Constructor; set front and back to null
+	** Constructor; set front and back to -1 (empty node). Can be created
+	** with initial value as well.
 	*********************************************************************/
-	Queue();
+	Queue(int val = -1);
 	
 	/*********************************************************************
 	** Description: 
@@ -43,21 +54,29 @@ public:
 
 	/*********************************************************************
 	** Description: 
-	** Add a value to the queue. Value will be at back of the queue (FIFO)
+	** Add a positive value to the queue. Value will be at back of the queue (FIFO)
 	*********************************************************************/
-	void add(int val);
+	int addBack(int val);
 
 	/*********************************************************************
 	** Description: 
 	** Remove a value from the front of queue. Return the value before 
-	** removing. Return -12345 if queue is empty.
+	** removing. Removing actually just sets to -1. Return -1 if queue is 
+	** empty.
 	*********************************************************************/
-	int remove();
+	int removeFront();
 
 	/*********************************************************************
 	** Description: 
-	** Loop through queue and print values separated by spaces. If empty
-	** print "Queue is empty". Print from front to back.
+	** Simply return the value at the front pointer of the queue. Returns
+	** -1 if queue is empty.
+	*********************************************************************/
+	int getFront();
+
+	/*********************************************************************
+	** Description: 
+	** Loop through queue and print values. If empty print "Queue is 
+	** empty". Print from front to back.
 	*********************************************************************/
 	void displayQueue();
 };

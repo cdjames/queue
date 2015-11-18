@@ -1,101 +1,144 @@
 /*********************************************************************
 ** Author: Collin James
 ** Date: 11/3/15
-** Description: A class that implements a double-linked queue data
-** structure; implementation file
+** Description: A class that implements a circular double-linked queue data
+** structure.
+**
+** Implementation file
 *********************************************************************/
 
 #include <iostream>
 #include "Queue.hpp" // see for function descriptions
 
-Queue::Queue()
+Queue::Queue(int val)
 {
-	front = NULL;
-	back = NULL;
+	back = new Queuenode(val); // will be -1 when created, so empty node
+	front = back;	// front and back are the same thing at this point
 }
 
 Queue::~Queue()
 {
 	Queuenode *tempPtr = front; // point at front
-	/* loop until tempPtr is NULL */
-	while(tempPtr)
+	Queuenode *frontPtr = front; // point at front
+
+	/* loop until done; set done to true when the element behind the one deleted is
+	 * back at front */
+	bool done = false;
+	while(!done)
 	{
 		Queuenode *trash = tempPtr;
-		tempPtr = tempPtr->behind;
+		std::cout << "deleting " << tempPtr << std::endl; // uncomment for quiet deletion
+		
+		if(tempPtr->behind == front)
+			done = true;
+		else
+		{
+			tempPtr = tempPtr->behind;
+			std::cout << "next: " << tempPtr << std::endl; // uncomment for quiet deletion
+		}
+		
 		delete trash;
 	}	
 }
 
-void Queue::add(int val)
+int Queue::addBack(int val)
 {
-	/* first element added */
-	if(!back) // if back is null
-	{
-		back = new Queuenode(val);
-		front = back; // front and back are the same
-	}
-	/* second element is added */
-	else if(front && front == back)
-	{
-		/* new node, where back becomes new previous node*/
-		Queuenode *newnode = new Queuenode(val, back, NULL);
-		front->behind = newnode; // new node is right behind front
-		
-		/* newnode is the new back of the queue */
-		back = newnode;
-	}
+	/* if negative value, don't add anything */
+	if(val < 0)
+		return -1;
 	else
 	{
-		/* create a new node, where the old back becomes the node in front of the new node */
-		Queuenode *newnode = new Queuenode(val, back, NULL);
-		Queuenode *oldback = back;
-		
-		/* old back is now second from back, so give it a new behind node*/
-		oldback->behind = newnode;
-		
-		/* newnode is the new back of the queue */
-		back = newnode;
+		/* first element added; works if "virgin" or if other nodes exist 
+		 * reuses back node to save memory */
+		if(back->value == -1 && back == front) // if back is front and empty
+			back->value = val;
+
+		/* "virgin" 2nd node (only 2 node pointers in existence) */
+		else if(front == back && front->ahead == back)
+		{
+			Queuenode *newnode = new Queuenode(val, front, front);
+			front->ahead = newnode; // new node is right behind front
+			front->behind = newnode; // new node is right behind front
+			
+			/* newnode is the new back of the queue */
+			back = newnode;
+		}
+		/* upon non-virgin 2+ nodes */
+		else
+		{
+			// if(front->ahead != back)
+			// {
+			// 	Queuenode *tempPtr = front->ahead;
+			// 	front = front->ahead;
+			// }
+			// std::cout << "addBack third if" << std::endl;
+			/* create a new node, where the old back becomes the node in front of the new node */
+			Queuenode *newnode = new Queuenode(val, back, back->behind);
+			Queuenode *oldback = back;
+			
+			/* old back is now second from back, so give it a new behind node*/
+			oldback->behind = newnode;
+			
+			/* newnode is the new back of the queue */
+			back = newnode;
+		}
+
+		return val;
 	}
 }
 
-int Queue::remove()
+int Queue::removeFront()
 {
-	if(front) // front is not null
+	int frontval = getFront();
+
+	if(frontval >= 0) // front (and list) is not empty
 	{
-		Queuenode *tempPtr = front;	// point at front
-		int temp_val = tempPtr->value; // save the value
-		if(front->behind) // there are at least 2 items in the list
+		front->value = -1; // set front value to empty (i.e. "remove" it)
+
+		if(back != front) // only set new front if more than 1 item in list
 			front = front->behind;
-		else // there is only 1 item left
-			front = back = NULL; // so back and front should point to nothing
-		
-		delete tempPtr;
-		return temp_val;
 	}
-	else // nothing in the queue
-		return -12345;	// return junk number
+		
+	return frontval;	// return value; may be -1 if empty queue
+}
+
+int Queue::getFront()
+{
+	if(front->value == -1)
+		std::cout << "Queue is empty" << std::endl;
+
+	/* will return -1 if empty */
+	return front->value;
 }
 
 void Queue::displayQueue()
 {
-	if(front)
+	int count = 0;
+	std::cout << "    front: " << front->value << "    " << "back: " << back->value << std::endl;
+	if(front->value != -1)
 	{
 		/* loop through queue and print values */
 		Queuenode *tempPtr = front;
-		std::cout << "front pointer is: " << front << "   \n";
-		while(tempPtr != NULL)
+		std::cout << "    front pointer is: " << front << "   \n";
+		
+		do
 		{
-			std::cout << tempPtr->value << "   ";
-			/* comment out next three lines for no pointer addresses */
-			std::cout << "pointer is: " << tempPtr << "   ";
-			std::cout << "behind pointer is: " << tempPtr->behind << "   ";
-			std::cout << "ahead pointer is: " << tempPtr->ahead << "   \n";
+			if(tempPtr->value != -1) // if not empty node
+			{
+				count++;
+				std::cout << "value at node " << count << " is: " << tempPtr->value << std::endl;
+				/* comment out next three lines for no pointer addresses */
+				std::cout << "    pointer is: " << tempPtr << std::endl;
+				std::cout << "    behind pointer is: " << tempPtr->behind << std::endl;
+				std::cout << "    ahead pointer is: " << tempPtr->ahead << std::endl;
+			}
 
 			tempPtr = tempPtr->behind;
-		}	
-		std::cout << "back pointer is: " << back << "   \n";
+		} while(tempPtr != front); // when it has gone all the way around it will be equal to front again
+
+		std::cout << "    back pointer is: " << back;
 		std::cout << std::endl;
 	}
-	else // if head is null, nothing is in queue
+	else // if front (or back) is -1, nothing is in queue
 		std::cout << "Queue is empty" << std::endl;
 }

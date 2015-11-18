@@ -4,10 +4,10 @@
 # replace 'your_file' below with your actual source file names.
 # add more if needed.
 
-CXX = Filehandler.cpp
-CXX += LinearSearch.cpp
-CXX += SelectionSort.cpp
-CXX += BinarySearch.cpp
+CXX = Queue.cpp
+# CXX += LinearSearch.cpp
+# CXX += SelectionSort.cpp
+# CXX += BinarySearch.cpp
 CXX += main.cpp 
 
 PROG1 = main
