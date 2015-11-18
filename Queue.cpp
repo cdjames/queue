@@ -27,14 +27,14 @@ Queue::~Queue()
 	while(!done)
 	{
 		Queuenode *trash = tempPtr;
-		std::cout << "deleting " << tempPtr << std::endl; // uncomment for quiet deletion
+		// std::cout << "deleting " << tempPtr << std::endl; // uncomment for quiet deletion
 		
 		if(tempPtr->behind == front)
 			done = true;
 		else
 		{
 			tempPtr = tempPtr->behind;
-			std::cout << "next: " << tempPtr << std::endl; // uncomment for quiet deletion
+			// std::cout << "next: " << tempPtr << std::endl; // uncomment for quiet deletion
 		}
 		
 		delete trash;
@@ -131,7 +131,7 @@ int Queue::getFront()
 void Queue::displayQueue()
 {
 	int count = 0;
-	std::cout << "    front: " << front->value << "    " << "back: " << back->value << std::endl;
+	// std::cout << "    front: " << front->value << "    " << "back: " << back->value << std::endl;
 	if(front->value != -1)
 	{
 		/* loop through queue and print values */

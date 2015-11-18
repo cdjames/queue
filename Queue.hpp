@@ -75,11 +75,12 @@ public:
 	*********************************************************************/
 	int getFront();
 
-	/*********************************************************************
+	// umm, for testing
+	/********************************************************************
 	** Description: 
-	** Loop through queue and print values. If empty print "Queue is 
-	** empty". Print from front to back.
-	*********************************************************************/
+	** Loop through queue and print values (and pointer addresses). If 
+	** empty print "Queue is empty". Print from front to back.
+	********************************************************************/
 	void displayQueue();
 };
 
