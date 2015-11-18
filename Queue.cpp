@@ -56,6 +56,7 @@ int Queue::addBack(int val)
 		/* "virgin" 2nd node (only 2 node pointers in existence) */
 		else if(front == back && front->ahead == back)
 		{
+			// std::cout << "addBack 2nd if" << std::endl;
 			Queuenode *newnode = new Queuenode(val, front, front);
 			front->ahead = newnode; // new node is right behind front
 			front->behind = newnode; // new node is right behind front
@@ -63,24 +64,40 @@ int Queue::addBack(int val)
 			/* newnode is the new back of the queue */
 			back = newnode;
 		}
-		/* upon non-virgin 2+ nodes */
+		/* upon 2+ nodes */
 		else
 		{
-			// if(front->ahead != back)
-			// {
-			// 	Queuenode *tempPtr = front->ahead;
-			// 	front = front->ahead;
-			// }
-			// std::cout << "addBack third if" << std::endl;
-			/* create a new node, where the old back becomes the node in front of the new node */
-			Queuenode *newnode = new Queuenode(val, back, back->behind);
-			Queuenode *oldback = back;
+			/* case where there are empty nodes ahead of front */
+			if(front->ahead != back)
+			{
+				// std::cout << "addBack 3rd if" << std::endl;
+				front = front->ahead; // set front to the empty node ahead of it
+				Queuenode *tempPtr = front; // start at new front
+				/* loop until the back node and copy value of node behind to current node */
+				while(tempPtr != back)
+				{
+					tempPtr->value = tempPtr->behind->value;
+					tempPtr = tempPtr->behind;
+				}
+				/* back value is free to get new value */
+				back->value = val;
+			}
 			
-			/* old back is now second from back, so give it a new behind node*/
-			oldback->behind = newnode;
-			
-			/* newnode is the new back of the queue */
-			back = newnode;
+			/* no empty nodes; need to add a new one */
+			else
+			{
+				// std::cout << "addBack last if" << std::endl;
+				/* create a new node, where the old back becomes the node in front of the new node */
+				Queuenode *newnode = new Queuenode(val, back, back->behind);
+				Queuenode *oldback = back;
+				
+				/* old back is now second from back, so give it a new behind node*/
+				oldback->behind = newnode;
+				
+				/* newnode is the new back of the queue */
+				back = newnode;
+				front->ahead = back;
+			}
 		}
 
 		return val;
@@ -129,8 +146,8 @@ void Queue::displayQueue()
 				std::cout << "value at node " << count << " is: " << tempPtr->value << std::endl;
 				/* comment out next three lines for no pointer addresses */
 				std::cout << "    pointer is: " << tempPtr << std::endl;
-				std::cout << "    behind pointer is: " << tempPtr->behind << std::endl;
 				std::cout << "    ahead pointer is: " << tempPtr->ahead << std::endl;
+				std::cout << "    behind pointer is: " << tempPtr->behind << std::endl;
 			}
 
 			tempPtr = tempPtr->behind;

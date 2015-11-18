@@ -54,7 +54,9 @@ public:
 
 	/*********************************************************************
 	** Description: 
-	** Add a positive value to the queue. Value will be at back of the queue (FIFO)
+	** Add a positive value to the queue. Value will be at back of the 
+	** queue (FIFO). If empty nodes in queue, uses them before adding new
+	** nodes.
 	*********************************************************************/
 	int addBack(int val);
 
